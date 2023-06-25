@@ -1,0 +1,45 @@
+	ORG 0x0800		; Program start address
+
+	SECTION .data
+array:	DB 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+arrayLen:	EQU $ - array
+
+	SECTION .text
+global _start
+
+_start:
+	; Initialize registers
+	mov eax, 0			; Counter for loop
+	mov ebx, 0			; Element to search for
+	mov ecx, 0			; Counter for matches
+
+searchLoop:
+	cmp eax, arrayLen		; Compare counter with array length
+	jge endSearch			; Jump if counter >= array length
+
+	mov dl, [array + eax]		; Load array element into dl
+	cmp dl, ebx			; Compare array element with search element
+	jne nextIteration		; Jump if not equal
+
+	inc ecx				; Increment match counter
+
+nextIteration:
+	inc eax				; Increment loop counter
+	jmp searchLoop			; Jump to next iteration
+
+endSearch:
+	; Print the results
+	mov eax, 4			; System call number for write
+	mov ebx, 1			; File descriptor for stdout
+	lea ecx, [ebp + resultMessage]	; Load address of resultMessage
+	mov edx, resultMessageLen	; Length of resultMessage
+	int 0x80			; Perform system call
+
+	; Terminate the program
+	mov eax, 1			; System call number for exit
+	xor ebx, ebx			; Exit status code 0
+	int 0x80			; Perform system call
+
+section .data
+resultMessage:	db "Total matches: ", 0xA
+resultMessageLen: equ $ - resultMessage
