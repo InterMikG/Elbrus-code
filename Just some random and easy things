@@ -1,0 +1,25 @@
+#include <stdio.h>
+
+// Функция для вычисления факториала
+unsigned long long factorial(unsigned int n) {
+    if (n == 0) {
+        return 1;
+    } else {
+        return n * factorial(n - 1);
+    }
+}
+
+int main() {
+    unsigned int n;
+    printf("Введите целое неотрицательное число: ");
+    scanf("%u", &n);
+
+    if (n >= 0) {
+        unsigned long long result = factorial(n);
+        printf("%u! = %llu\n", n, result);
+    } else {
+        printf("Факториал определен только для неотрицательных чисел.\n");
+    }
+
+    return 0;
+}
