@@ -1,0 +1,36 @@
+import os
+from datetime import datetime
+import shutil
+
+# Путь к папке с фотографиями(the path to the folder with photos)
+photo_folder = "/путь/к/папке/с/фотографиями"
+
+# Функция для получения даты съемки из метаданных фотографии(Function for getting the date of the shooting from the metadata of the photo)
+def get_photo_date(photo_path):
+    # Здесь нужно использовать библиотеку для извлечения метаданных из фотографии(Here you need to use the library to extract metadata from the photo)
+    # и получения даты съемки.(and getting the shooting date.)
+    # Вам может понадобиться библиотека, такая как ExifTool.(You may need a library like ExifTool.)
+
+    # Вернуть дату съемки в формате datetime(Return the shooting date in datetime format)
+    return photo_date
+
+# Пройти по всем файлам в папке с фотографиями(Go through all the files in the folder with photos)
+for filename in os.listdir(photo_folder):
+    if filename.endswith(".jpg") or filename.endswith(".jpeg"):
+        photo_path = os.path.join(photo_folder, filename)
+
+        # Получить дату съемки фотографии(Get the date the photo was taken)
+        photo_date = get_photo_date(photo_path)
+
+        if photo_date:
+            # Создать папку для данной даты, если она не существует(Create a folder for this date if it does not exist)
+            destination_folder = os.path.join(photo_folder, photo_date.strftime("%Y-%m-%d"))
+            os.makedirs(destination_folder, exist_ok=True)
+
+            # Переместить фотографию в соответствующую папку(Move the photo to the appropriate folder)
+            shutil.move(photo_path, os.path.join(destination_folder, filename))
+        else:
+            # Если не удалось получить дату съемки, переместить фото в папку "Неизвестно"(If it was not possible to get the shooting date, move the photo to the "Unknown" folder)
+            unknown_folder = os.path.join(photo_folder, "Неизвестно")
+            os.makedirs(unknown_folder, exist_ok=True)
+            shutil.move(photo_path, os.path.join(unknown_folder, filename))
