@@ -1,0 +1,34 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <omp.h>
+
+#define N 10000000
+
+int main() {
+    double *data = (double *)malloc(N * sizeof(double));
+
+    if (data == NULL) {
+        fprintf(stderr, "Ошибка выделения памяти\n");
+        return 1;
+    }
+
+    // Инициализация массива случайными значениями
+    #pragma omp parallel for
+    for (int i = 0; i < N; i++) {
+        data[i] = (double)rand() / RAND_MAX;
+    }
+
+    // Выполнение сложных вычислений
+    double result = 0.0;
+    #pragma omp parallel for reduction(+:result)
+    for (int i = 0; i < N; i++) {
+        result += sin(data[i]) * cos(data[i]);
+    }
+
+    printf("Результат сложных вычислений: %f\n", result);
+
+    free(data);
+
+    return 0;
+}
